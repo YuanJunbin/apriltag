@@ -1,19 +1,15 @@
 /* Copyright (C) 2013-2016, The Regents of The University of Michigan.
 All rights reserved.
-
 This software was developed in the APRIL Robotics Lab under the
 direction of Edwin Olson, ebolson@umich.edu. This software may be
 available under alternative licensing terms; contact the address above.
-
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
-
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
    and/or other materials provided with the distribution.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,7 +20,6 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the Regents of The University of Michigan.
@@ -66,7 +61,6 @@ int main(int argc, char *argv[])
     getopt_add_bool(getopt, 'd', "debug", 0, "Enable debugging output (slow)");
     getopt_add_bool(getopt, 'q', "quiet", 0, "Reduce output");
     getopt_add_string(getopt, 'f', "family", "tag36h11", "Tag family to use");
-    getopt_add_string(getopt, 'o', "results_output", "/home/siheng/Desktop/results-apriltag-c.txt", "Filepath to results");
     getopt_add_int(getopt, 'i', "iters", "1", "Repeat processing on input set this many times");
     getopt_add_int(getopt, 't', "threads", "1", "Use this many CPU threads");
     getopt_add_int(getopt, 'a', "hamming", "1", "Detect tags with up to this many bit errors.");
@@ -126,13 +120,6 @@ int main(int argc, char *argv[])
     int quiet = getopt_get_bool(getopt, "quiet");
 
     int maxiters = getopt_get_int(getopt, "iters");
-
-    // To make a file here and output the size.
-    const char *results_filename = getopt_get_string(getopt, "results_output");
-    FILE *fp;
-    fp = fopen(results_filename, "w+");
-    char line[15];
-    char coord_xy[100];
 
     for (int iter = 0; iter < maxiters; iter++) {
 
@@ -217,16 +204,9 @@ int main(int argc, char *argv[])
             }
 
             for (int i = 0; i < zarray_size(detections); i++) {
-                // TODO: You can get coordinates here.
                 apriltag_detection_t *det;
                 zarray_get(detections, i, &det);
-                // double p[4][2];
-                
-                for(int i_corner=0; i_corner<4; i_corner++){
-                    sprintf(coord_xy, "%f, %f\n", det->p[i_corner][0], det->p[i_corner][1]);
-                    fputs(coord_xy, fp);
-                }
-                
+
                 if (!quiet)
                     printf("detection %3d: id (%2dx%2d)-%-4d, hamming %d, margin %8.3f\n",
                            i, det->family->nbits, det->family->h, det->id, det->hamming, det->decision_margin);
@@ -259,8 +239,6 @@ int main(int argc, char *argv[])
             image_u8_destroy(im);
         }
 
-        // Close results file.
-        fclose(fp);
 
         printf("Summary\n");
 
