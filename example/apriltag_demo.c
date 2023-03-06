@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
             printf("iter %d / %d\n", iter + 1, maxiters);
 
         for (int input = 0; input < zarray_size(inputs); input++) {
-
+            
             int hamm_hist[HAMM_HIST_MAX];
             memset(hamm_hist, 0, sizeof(hamm_hist));
 
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
                 // double p[4][2];
                 
                 for(int i_corner=0; i_corner<4; i_corner++){
-                    sprintf(coord_xy, "%f, %f\n", det->p[i_corner][0], det->p[i_corner][1]);
+                    sprintf(coord_xy, "%i, %f, %f\n", input, det->p[i_corner][0], det->p[i_corner][1]);
                     fputs(coord_xy, fp);
                 }
                 
