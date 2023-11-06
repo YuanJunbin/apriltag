@@ -222,8 +222,9 @@ int main(int argc, char *argv[])
                 zarray_get(detections, i, &det);
                 // double p[4][2];
                 
-                for(int i_corner=0; i_corner<4; i_corner++){
-                    sprintf(coord_xy, "%i, %f, %f\n", input, det->p[i_corner][0], det->p[i_corner][1]);
+                for(int i_corner=0; i_corner<4; i_corner++)
+                {
+                    sprintf(coord_xy, "%i, %i, %f, %f\n", input, det->id * 4 + i_corner, det->p[i_corner][0], det->p[i_corner][1]);
                     fputs(coord_xy, fp);
                 }
                 
